@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_filiihub"
+        android:icon="@drawable/filiihub"
+        android:title="FiliiHub"/>
+
+    <item
+        android:id="@+id/navigation_event"
+        android:icon="@drawable/event"
+        android:title="EventList" />
+</menu>
