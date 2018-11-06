@@ -138,6 +138,10 @@ public class FiliihubFragment extends Fragment {
 
     private void initSocket(){
 
+        if(mSocket != null) {
+            destroySocket();
+        }
+
         Log.i("SOCKET", "Initializing Socket");
         FiliiApp app = (FiliiApp) getActivity().getApplication();
         mSocket = app.getSocket();
@@ -153,16 +157,14 @@ public class FiliihubFragment extends Fragment {
     }
 
     private void destroySocket(){
-        Log.i("SOCKET", "Destroying Socket");
-        mSocket.disconnect();
-        mSocket.off(Socket.EVENT_CONNECT,onConnect);
-        mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
-        mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
-        mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
-        mSocket.off("update", onUpdate);
+        if(mSocket != null){
+            Log.i("SOCKET", "Destroying Socket");
+            mSocket.disconnect();
+            mSocket.off(Socket.EVENT_CONNECT,onConnect);
+            mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
+            mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
+            mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
+            mSocket.off("update", onUpdate);
+        }
     }
-
-
-
-
 }

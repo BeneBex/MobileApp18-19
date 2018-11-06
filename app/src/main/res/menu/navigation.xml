@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/navigation_filiihub"
-        android:icon="@drawable/filiihub"
-        android:title="FiliiHub"/>
+        android:icon="@drawable/filiikot"
+        android:title="Filiikot"/>
 
     <item
         android:id="@+id/navigation_event"
         android:icon="@drawable/event"
-        android:title="EventList" />
+        android:title="Events" />
 </menu>
