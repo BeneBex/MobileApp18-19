@@ -28,12 +28,16 @@ public class FiliihubFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         initSocket();
-
         return inflater.inflate(R.layout.fragment_filiihub, container, false);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        destroySocket();
+    }
+
 
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
@@ -43,7 +47,7 @@ public class FiliihubFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("SOCKET", "Connected");
+                    Log.i("SOCKET", "Socket connected");
                     if(!isConnected) {
                         makeToast("Socket Connected!", Toast.LENGTH_SHORT);
                         isConnected = true;
@@ -61,8 +65,8 @@ public class FiliihubFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.i("SOCKET", "Socket disconnected!");
                     if(isConnected){
-                        Log.i("SOCKET", "diconnected");
                         isConnected = false;
                         makeToast("Socket Disconnected!", Toast.LENGTH_SHORT);
                     }
@@ -99,7 +103,7 @@ public class FiliihubFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("SOCKET", "Status updated");
+                    Log.i("SOCKET", "Socket Status Updated");
                     JSONObject data = (JSONObject) args[0];
                     String openClosed;
                     String temperature;
@@ -134,7 +138,7 @@ public class FiliihubFragment extends Fragment {
 
     private void initSocket(){
 
-
+        Log.i("SOCKET", "Initializing Socket");
         FiliiApp app = (FiliiApp) getActivity().getApplication();
         mSocket = app.getSocket();
 
@@ -144,11 +148,12 @@ public class FiliihubFragment extends Fragment {
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("update", onUpdate);
 
-        Log.i("SOCKET", "socket.connect()");
+
         mSocket.connect();
     }
 
     private void destroySocket(){
+        Log.i("SOCKET", "Destroying Socket");
         mSocket.disconnect();
         mSocket.off(Socket.EVENT_CONNECT,onConnect);
         mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
@@ -158,11 +163,6 @@ public class FiliihubFragment extends Fragment {
     }
 
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        destroySocket();
-    }
 
 
 }
