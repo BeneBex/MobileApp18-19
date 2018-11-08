@@ -46,13 +46,12 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
 
         initSocket();
     }
-
+    
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         destroySocket();
     }
-
 
     private void initSocket(){
 
