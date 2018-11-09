@@ -185,6 +185,7 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
                     sb.append(" °C");
                     sb.append("\n");
                     sb.append("Open sinds: ");
+                    sb.append("\n");
                     sb.append(openSince);
                     sb.append("\n");
                     mTextView.setText(sb.toString());

@@ -14,14 +14,27 @@ public class EventsDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_events_detail, container, false);
 
         Bundle bundle = getArguments();
-        TextView Textview = (TextView) view.findViewById(R.id.textViewTitle);
-        String item = "";
+        TextView textviewTitle = (TextView) view.findViewById(R.id.textViewTitle);
+        TextView textviewContent = (TextView) view.findViewById(R.id.textViewContent);
+        TextView textviexPlace = (TextView) view.findViewById(R.id.textViewPlace);
+        TextView textviexDate = (TextView) view.findViewById(R.id.textViewDate);
+        String name = "";
+        String description = "";
+        String place = "";
+        String date = "";
 
         if(bundle != null){
-            item = getArguments().getString("name");
+            name = getArguments().getString("name");
+            description = getArguments().getString("description");
+            place = getArguments().getString("place");
+            date = getArguments().getString("date").substring(0,10);
+
         }
 
-        Textview.setText(item);
+        textviewTitle.setText(name);
+        textviewContent.setText(description);
+        textviexPlace.setText(place);
+        textviexDate.setText(date);
 
         return view;
     }

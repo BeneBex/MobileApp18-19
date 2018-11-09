@@ -24,8 +24,6 @@ import be.filii.filiihub.data.Event;
 public class EventsListFragment extends Fragment
     implements EventAdapter.ListItemClickListener{
 
-    ListView listView;
-
     private List<Event> data;
 
     private RecyclerView mRecyclerView;
@@ -79,8 +77,6 @@ public class EventsListFragment extends Fragment
 
         data = DataMock.mockEvents();
 
-        //listView = (ListView) getView().findViewById(R.id.listView);
-
         mRecyclerView = (RecyclerView) getView().findViewById(R.id.events_recycler_view);
         mRecyclerView.setHasFixedSize(true);
 
@@ -90,46 +86,5 @@ public class EventsListFragment extends Fragment
         mAdapter= new EventAdapter(data, this);
         mRecyclerView.setAdapter(mAdapter);
 
-
-
-        /*
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String item = (String)listView.getItemAtPosition(i);
-                Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
-
-                EventsDetailFragment detailFragment = (EventsDetailFragment) getFragmentManager().findFragmentById(R.id.detail);
-                if (detailFragment != null && detailFragment.isVisible()) {
-                    // Visible: send bundle
-                    EventsDetailFragment newFragment = new EventsDetailFragment();
-                    Bundle bundle=new Bundle();
-                    bundle.putString("item", item);
-                    newFragment.setArguments(bundle);
-
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-                    transaction.replace(detailFragment.getId(), newFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-                else {
-                    // Not visible: start as intent
-                    Intent intent = new Intent(getActivity().getBaseContext(), EventsDetailFragment.class);
-                    intent.putExtra("item", item);
-                    getActivity().startActivity(intent);
-                }
-
-
-
-            }
-        });
-        */
-
     }
-
-
-
-
-
 }
