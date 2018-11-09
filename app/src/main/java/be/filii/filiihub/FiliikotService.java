@@ -153,7 +153,7 @@ public class FiliikotService extends Service {
 
 
             if (lastFiliikotState == null) {
-                lastFiliikotState = "";
+                lastFiliikotState = openClosed;
             } else if (!lastFiliikotState.equals(openClosed)) {
                 lastFiliikotState = openClosed;
 

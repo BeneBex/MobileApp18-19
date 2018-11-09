@@ -31,7 +31,7 @@ public class FiliiApp extends Application {
             NotificationChannel serviceChannel = new NotificationChannel(
                     CHANNEL_SERVICE_ID,
                     "Filiikot Service Channel",
-                    NotificationManager.IMPORTANCE_LOW
+                    NotificationManager.IMPORTANCE_MIN
 
             );
 
