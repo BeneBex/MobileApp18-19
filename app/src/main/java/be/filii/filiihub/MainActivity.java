@@ -35,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putInt("nav_id", navItemId);
             editor.apply();
-
-
-
             switch (item.getItemId()) {
                 case R.id.navigation_filiihub:
                     selectedFragment = FiliihubFragment.newInstance();

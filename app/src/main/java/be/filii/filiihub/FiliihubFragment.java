@@ -184,7 +184,8 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
                     sb.append(temperature);
                     sb.append(" °C");
                     sb.append("\n");
-                    sb.append("Open sinds: ");
+                    sb.append(openClosed);
+                    sb.append(" sinds: ");
                     sb.append("\n");
                     sb.append(openSince);
                     sb.append("\n");
