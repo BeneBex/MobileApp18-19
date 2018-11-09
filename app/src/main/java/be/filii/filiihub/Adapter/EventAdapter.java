@@ -65,4 +65,6 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
         int count = events.size();
         return count;
     }
+
+
 }
