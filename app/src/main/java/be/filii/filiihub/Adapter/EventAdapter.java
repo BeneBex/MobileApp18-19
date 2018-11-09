@@ -19,17 +19,32 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.MyViewHolder
 
     private List<Event> events;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    final private ListItemClickListener mOnClickListener;
+
+    public interface ListItemClickListener {
+        void onListItemClick(int clickedItemIndex);
+    }
+
+    public class MyViewHolder extends RecyclerView.ViewHolder
+    implements View.OnClickListener {
 
         public TextView name;
 
         public MyViewHolder(View view){
             super(view);
             name = view.findViewById(R.id.name);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            mOnClickListener.onListItemClick(clickedPosition);
         }
     }
-    public EventAdapter(List<Event> events){
+    public EventAdapter(List<Event> events, ListItemClickListener listener){
         this.events = events;
+        mOnClickListener = listener;
     }
 
     @NonNull

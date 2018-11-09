@@ -33,7 +33,7 @@ public class EventFragment extends Fragment{
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_event, container, false);
         listEventShower = view.findViewById(R.id.recyclerfh);
-        adapter = new EventAdapter(events);
+        adapter = new EventAdapter(null, null);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         listEventShower.setLayoutManager(layoutManager);
         listEventShower.setItemAnimator(new DefaultItemAnimator());

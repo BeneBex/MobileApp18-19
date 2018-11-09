@@ -46,7 +46,7 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
 
         initSocket();
     }
-    
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
