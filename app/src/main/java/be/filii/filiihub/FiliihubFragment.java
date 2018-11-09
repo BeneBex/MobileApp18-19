@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +27,7 @@ public class FiliihubFragment extends Fragment {
 
     private TextView mTextView;
     private ProgressBar mLoadingSpinner;
-
+    private ImageView mImageView;
 
     private Socket mSocket;
     private Boolean isConnected = true;
@@ -42,6 +44,7 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
         super.onActivityCreated(savedInstanceState);
 
         mTextView = (TextView) getView().findViewById(R.id.socketText);
+        mImageView = (ImageView) getView().findViewById(R.id.filiikot_image);
         mLoadingSpinner = (ProgressBar) getView().findViewById(R.id.socketLoadingIndicator);
 
         initSocket();
@@ -160,12 +163,10 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
                     JSONObject data = (JSONObject) args[0];
                     String openClosed;
                     String temperature;
-                    String lastUpdate;
                     String openSince;
                     try {
                         openClosed = data.getString("openclosed");
                         temperature = data.getString("temperature");
-                        lastUpdate = data.getString("lastUpdate");
                         openSince = data.getString("since");
                     } catch (JSONException e) {
                         Log.e("SOCKET", e.getMessage());
@@ -186,11 +187,12 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
                     sb.append("Open sinds: ");
                     sb.append(openSince);
                     sb.append("\n");
-                    sb.append("Laatste update: ");
-                    sb.append(lastUpdate);
-                    sb.append("\n");
                     mTextView.setText(sb.toString());
-
+                    if(openClosed.equals("open")){
+                        mImageView.setImageResource(R.drawable.ic_open);
+                    }else{
+                        mImageView.setImageResource(R.drawable.ic_closed);
+                    }
                 }
             });
         }
@@ -209,12 +211,14 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
 
     private void showLoadingSpinner(){
         mTextView.setVisibility(View.INVISIBLE);
+        mImageView.setVisibility(View.INVISIBLE);
         mLoadingSpinner.setVisibility(View.VISIBLE);
     }
 
     private void hideLoadingSpinner(){
         mLoadingSpinner.setVisibility(View.INVISIBLE);
         mTextView.setVisibility(View.VISIBLE);
+        mImageView.setVisibility(View.VISIBLE);
     }
 
 
