@@ -1,5 +1,8 @@
 package be.filii.filiihub;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -101,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem item = (MenuItem) menu.findItem(R.id.switchId);
         item.setActionView(R.layout.switch_layout);
         Switch switchAB = item.getActionView().findViewById(R.id.switchAB);
-        switchAB.setChecked(false);
+        switchAB.setChecked(isServiceRunning(FiliikotService.class));
+
 
         switchAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -109,14 +114,37 @@ public class MainActivity extends AppCompatActivity {
                 if(isChecked){
                     Toast.makeText(getApplication(), "ON", Toast.LENGTH_SHORT)
                             .show();
+                    startService();
                 } else {
                     Toast.makeText(getApplication(), "OFF", Toast.LENGTH_SHORT)
                             .show();
+                    stopService();
                 }
             }
         });
-
-
         return super.onCreateOptionsMenu(menu);
     }
+
+    public void startService() {
+        Intent serviceIntent = new Intent(this, FiliikotService.class);
+        startService(serviceIntent);
+    }
+
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, FiliikotService.class);
+        stopService(serviceIntent);
+
+    }
+
+    private boolean isServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

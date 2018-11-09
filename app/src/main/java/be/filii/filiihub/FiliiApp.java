@@ -14,7 +14,9 @@ public class FiliiApp extends Application {
 
 
 
-    public static final String CHANNEL_ID = "FiliiKotChannel";
+    public static final String CHANNEL_SERVICE_ID = "FiliiKotChannel";
+    public static final String CHANNEL_NOTIF_ID = "FiliiKotNotification";
+
 
 
     @Override
@@ -27,14 +29,23 @@ public class FiliiApp extends Application {
     private void createNotificationChannel(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
+                    CHANNEL_SERVICE_ID,
                     "Filiikot Service Channel",
+                    NotificationManager.IMPORTANCE_LOW
+
+            );
+
+
+            NotificationChannel notificationChannel = new NotificationChannel(
+                    CHANNEL_NOTIF_ID,
+                    "Filiikot Notification Channel",
                     NotificationManager.IMPORTANCE_DEFAULT
+
             );
 
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
-
+            manager.createNotificationChannel(notificationChannel);
         }
     }
 

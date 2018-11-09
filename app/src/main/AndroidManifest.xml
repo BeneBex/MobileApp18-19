@@ -3,6 +3,7 @@
     package="be.filii.filiihub">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <application
         android:name=".FiliiApp"
         android:allowBackup="true"
@@ -20,6 +21,7 @@
         </activity>
         <activity android:name=".EventsDetailActivity">
         </activity>
+        <service android:name=".FiliikotService" />
     </application>
 
 </manifest>
