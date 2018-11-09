@@ -33,8 +33,7 @@ public class FiliikotService extends Service {
     Handler handler;
     PendingIntent pendingIntent;
     Context context;
-    String lastFiliikotState = "";
-
+    String lastFiliikotState = null;
 
 
     @Override
@@ -56,12 +55,10 @@ public class FiliikotService extends Service {
     }
 
 
+    private void initSocket() {
 
 
-    private void initSocket(){
-
-
-        if(mSocket != null) {
+        if (mSocket != null) {
             destroySocket();
         }
 
@@ -69,8 +66,8 @@ public class FiliikotService extends Service {
         FiliiApp app = (FiliiApp) getApplication();
         mSocket = app.getSocket();
 
-        mSocket.on(Socket.EVENT_CONNECT,onConnect);
-        mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("update", onUpdate);
@@ -80,13 +77,12 @@ public class FiliikotService extends Service {
     }
 
 
-
-    private void destroySocket(){
-        if(mSocket != null){
+    private void destroySocket() {
+        if (mSocket != null) {
             Log.i("SOCKET Service", "Destroying Socket");
             mSocket.disconnect();
-            mSocket.off(Socket.EVENT_CONNECT,onConnect);
-            mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
+            mSocket.off(Socket.EVENT_CONNECT, onConnect);
+            mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
             mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.off("update", onUpdate);
@@ -98,10 +94,10 @@ public class FiliikotService extends Service {
         @Override
         public void call(final Object... args) {
 
-                    Log.i("SOCKET Service", "Socket connected");
-                    isConnected = true;
+            Log.i("SOCKET Service", "Socket connected");
+            isConnected = true;
 
-                    setServiceNotification("Verbonden met het Filiikot!", "Websocket aangemaakt.");
+            setServiceNotification("Verbonden met het Filiikot!", "Websocket aangemaakt.");
 
         }
     };
@@ -156,8 +152,9 @@ public class FiliikotService extends Service {
             setServiceNotification("Het Filiikot is " + openClosed, "Laatste update: " + lastUpdate);
 
 
-            if (!lastFiliikotState.equals(openClosed))
-            {
+            if (lastFiliikotState == null) {
+                lastFiliikotState = "";
+            } else if (!lastFiliikotState.equals(openClosed)) {
                 lastFiliikotState = openClosed;
 
                 Notification updateNotification = new NotificationCompat.Builder(context, CHANNEL_NOTIF_ID)
@@ -176,7 +173,7 @@ public class FiliikotService extends Service {
     };
 
 
-    private void setServiceNotification(String title, String message){
+    private void setServiceNotification(String title, String message) {
         context = this;
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -193,7 +190,6 @@ public class FiliikotService extends Service {
                 .build();
         startForeground(1, notification);
     }
-
 
 
     @Override
