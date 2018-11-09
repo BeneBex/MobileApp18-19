@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,5 +95,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = (MenuItem) menu.findItem(R.id.switchId);
+        item.setActionView(R.layout.switch_layout);
+        Switch switchAB = item.getActionView().findViewById(R.id.switchAB);
+        switchAB.setChecked(false);
 
+        switchAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    Toast.makeText(getApplication(), "ON", Toast.LENGTH_SHORT)
+                            .show();
+                } else {
+                    Toast.makeText(getApplication(), "OFF", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+        });
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
 }
