@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">FiliiHub</string>
+    <string name="socket_url">https://www.ishetfiliikotopen.be</string>
 </resources>

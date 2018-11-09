@@ -5,11 +5,13 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,23 +40,14 @@ public class FiliikotService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        handler = new Handler();
-
         context = this;
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_SERVICE_ID)
-                .setContentTitle("Verbinden met het Filiikot!")
-                .setContentText("Websocket initialiseren...")
-                .setSmallIcon(R.drawable.ic_filii)
-                .setContentIntent(pendingIntent)
-                .build();
 
-        startForeground(1, notification);
-
+        setServiceNotification("Verbinden met het Filiikot!", "Websocket initialiseren...");
 
         initSocket();
 
@@ -107,14 +100,9 @@ public class FiliikotService extends Service {
 
                     Log.i("SOCKET Service", "Socket connected");
                     isConnected = true;
-                    Notification notification = new NotificationCompat.Builder(context, CHANNEL_SERVICE_ID)
-                            .setContentTitle("Verbonden met het Filiikot!")
-                            .setContentText("Websocket aangemaakt.")
-                            .setSmallIcon(R.drawable.ic_filii)
-                            .setContentIntent(pendingIntent)
-                            .build();
 
-                    startForeground(1, notification);
+                    setServiceNotification("Verbonden met het Filiikot!", "Websocket aangemaakt.");
+
         }
     };
 
@@ -124,14 +112,9 @@ public class FiliikotService extends Service {
 
             Log.i("SOCKET Service", "Socket disconnected");
             isConnected = false;
-            Notification notification = new NotificationCompat.Builder(context, CHANNEL_SERVICE_ID)
-                    .setContentTitle("Verbinding verbroken met het Filiikot!")
-                    .setContentText("De websocket heeft geen verbinding meer.")
-                    .setSmallIcon(R.drawable.ic_filii)
-                    .setContentIntent(pendingIntent)
-                    .build();
 
-            startForeground(1, notification);
+            setServiceNotification("Verbinding verbroken met het Filiikot!", "De websocket heeft geen verbinding meer.");
+
         }
     };
 
@@ -141,14 +124,9 @@ public class FiliikotService extends Service {
 
             Log.i("SOCKET Service", "Error connecting to socket");
             isConnected = true;
-            Notification notification = new NotificationCompat.Builder(context, CHANNEL_SERVICE_ID)
-                    .setContentTitle("Kan niet verbinden met het Filiikot!")
-                    .setContentText("Websocket de websocket kan geen verbinding maken.")
-                    .setSmallIcon(R.drawable.ic_filii)
-                    .setContentIntent(pendingIntent)
-                    .build();
 
-            startForeground(1, notification);
+            setServiceNotification("Kan niet verbinden met het Filiikot!", "Controleer de internetverbinding.");
+
         }
     };
 
@@ -167,20 +145,16 @@ public class FiliikotService extends Service {
             String openSince;
             try {
                 openClosed = data.getString("openclosed");
+                temperature = data.getString("temperature");
+                lastUpdate = data.getString("lastUpdate");
                 openSince = data.getString("since");
             } catch (JSONException e) {
                 Log.e("SOCKET", e.getMessage());
                 return;
             }
 
-            Notification notification = new NotificationCompat.Builder(context, CHANNEL_SERVICE_ID)
-                    .setContentTitle("Het Filiikot is " + openClosed)
-                    .setContentText("sinds " + openSince)
-                    .setSmallIcon(R.drawable.ic_filii)
-                    .setContentIntent(pendingIntent)
-                    .build();
+            setServiceNotification("Het Filiikot is " + openClosed, "Laatste update: " + lastUpdate);
 
-            startForeground(1, notification);
 
             if (!lastFiliikotState.equals(openClosed))
             {
@@ -190,6 +164,7 @@ public class FiliikotService extends Service {
                         .setContentTitle("Het Filiikot is " + openClosed)
                         .setContentText("sinds " + openSince)
                         .setSmallIcon(R.drawable.ic_filii)
+                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                         .setContentIntent(pendingIntent)
                         .build();
 
@@ -201,9 +176,25 @@ public class FiliikotService extends Service {
     };
 
 
-    private void runOnUiThread(Runnable runnable) {
-        handler.post(runnable);
+    private void setServiceNotification(String title, String message){
+        context = this;
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        pendingIntent = PendingIntent.getActivity(this,
+                0, notificationIntent, 0);
+
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_SERVICE_ID)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_filii)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimaryDark))
+                .setContentIntent(pendingIntent)
+                .setShowWhen(false)
+                .build();
+        startForeground(1, notification);
     }
+
+
 
     @Override
     public void onCreate() {

@@ -51,23 +51,20 @@ public class FiliiApp extends Application {
 
 
 
+    public Socket getSocket() {
+
+        String URL = getResources().getString(R.string.socket_url);
+        Socket mSocket;
 
 
+        IO.Options opts = new IO.Options();
+        opts.forceNew = true;
 
-
-
-    private static final String URL = "https://www.ishetfiliikotopen.be";
-
-    private Socket mSocket;
-    {
         try {
-            mSocket = IO.socket(URL);
+            mSocket = IO.socket(URL, opts);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Socket getSocket() {
         return mSocket;
     }
 }

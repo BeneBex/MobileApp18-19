@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -111,30 +112,43 @@ public class MainActivity extends AppCompatActivity {
         switchAB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
                 if(isChecked){
-                    Toast.makeText(getApplication(), "ON", Toast.LENGTH_SHORT)
-                            .show();
-                    startService();
+                    new StartServiceTask().execute();
                 } else {
-                    Toast.makeText(getApplication(), "OFF", Toast.LENGTH_SHORT)
-                            .show();
-                    stopService();
+                    new StopServiceTask().execute();
                 }
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
 
-    public void startService() {
-        Intent serviceIntent = new Intent(this, FiliikotService.class);
-        startService(serviceIntent);
+    public class StartServiceTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Intent serviceIntent = new Intent(getApplicationContext(), FiliikotService.class);
+            startService(serviceIntent);
+            return null;
+        }
     }
 
-    public void stopService() {
-        Intent serviceIntent = new Intent(this, FiliikotService.class);
-        stopService(serviceIntent);
 
+
+
+    public class StopServiceTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Intent serviceIntent = new Intent(getApplicationContext(), FiliikotService.class);
+            stopService(serviceIntent);
+            return null;
+        }
     }
+
+
+
+
+
+
 
     private boolean isServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
