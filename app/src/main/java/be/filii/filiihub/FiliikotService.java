@@ -145,27 +145,33 @@ public class FiliikotService extends Service {
 
             setServiceNotification("Het Filiikot is " + openClosed, "Laatste update: " + lastUpdate);
 
+            //sendStatusNotification(openClosed, openSince);
 
             if (lastFiliikotState == null) {
                 lastFiliikotState = openClosed;
             } else if (!lastFiliikotState.equals(openClosed)) {
                 lastFiliikotState = openClosed;
-
-                Notification updateNotification = new NotificationCompat.Builder(context, CHANNEL_NOTIF_ID)
-                        .setContentTitle("Het Filiikot is " + openClosed)
-                        .setContentText("sinds " + openSince)
-                        .setSmallIcon(R.drawable.ic_filii)
-                        .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                        .setContentIntent(pendingIntent)
-                        .build();
-
-                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-                notificationManager.notify(2, updateNotification);
+                sendStatusNotification(openClosed, openSince);
             }
-
         }
     };
 
+
+    private void sendStatusNotification(String openClosed, String openSince) {
+        Notification updateNotification = new NotificationCompat.Builder(context, CHANNEL_NOTIF_ID)
+                .setContentTitle("Het Filiikot is " + openClosed)
+                .setContentText("Sinds " + openSince)
+                .setSmallIcon(R.drawable.ic_filii)
+                .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                .build();
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+        notificationManager.notify(2, updateNotification);
+
+    }
 
     private void setServiceNotification(String title, String message) {
         context = this;
