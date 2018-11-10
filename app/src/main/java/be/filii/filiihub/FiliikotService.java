@@ -106,7 +106,7 @@ public class FiliikotService extends Service {
         @Override
         public void call(final Object... args) {
 
-            Log.i("SOCKET Service", "Socket disconnected");
+            Log.e("SOCKET Service", "Socket disconnected");
             isConnected = false;
 
             setServiceNotification("Verbinding verbroken met het Filiikot!", "De websocket heeft geen verbinding meer.");

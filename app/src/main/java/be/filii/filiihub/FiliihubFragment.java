@@ -34,8 +34,8 @@ public class FiliihubFragment extends Fragment {
     Toast toast = null;
 
     @Nullable
-@Override
-public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_filiihub, container, false);
     }
 
@@ -56,11 +56,11 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
         destroySocket();
     }
 
-    private void initSocket(){
+    private void initSocket() {
 
         showLoadingSpinner();
 
-        if(mSocket != null) {
+        if (mSocket != null) {
             destroySocket();
         }
 
@@ -68,8 +68,8 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
         FiliiApp app = (FiliiApp) getActivity().getApplication();
         mSocket = app.getSocket();
 
-        mSocket.on(Socket.EVENT_CONNECT,onConnect);
-        mSocket.on(Socket.EVENT_DISCONNECT,onDisconnect);
+        mSocket.on(Socket.EVENT_CONNECT, onConnect);
+        mSocket.on(Socket.EVENT_DISCONNECT, onDisconnect);
         mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectError);
         mSocket.on(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
         mSocket.on("update", onUpdate);
@@ -78,12 +78,12 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
         mSocket.connect();
     }
 
-    private void destroySocket(){
-        if(mSocket != null){
+    private void destroySocket() {
+        if (mSocket != null) {
             Log.i("SOCKET", "Destroying Socket");
             mSocket.disconnect();
-            mSocket.off(Socket.EVENT_CONNECT,onConnect);
-            mSocket.off(Socket.EVENT_DISCONNECT,onDisconnect);
+            mSocket.off(Socket.EVENT_CONNECT, onConnect);
+            mSocket.off(Socket.EVENT_DISCONNECT, onDisconnect);
             mSocket.off(Socket.EVENT_CONNECT_ERROR, onConnectError);
             mSocket.off(Socket.EVENT_CONNECT_TIMEOUT, onConnectError);
             mSocket.off("update", onUpdate);
@@ -91,18 +91,16 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     }
 
 
-
-
     private Emitter.Listener onConnect = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.i("SOCKET", "Socket connected");
-                    if(!isConnected) {
+                    if (!isConnected) {
                         makeToast("Socket Connected!", Toast.LENGTH_SHORT);
                         isConnected = true;
                     }
@@ -114,16 +112,16 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     private Emitter.Listener onDisconnect = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Log.i("SOCKET", "Socket disconnected!");
-                    if(isConnected){
+                    showLoadingSpinner();
+                    if (isConnected) {
                         isConnected = false;
                         makeToast("Socket Disconnected!", Toast.LENGTH_SHORT);
-                        showLoadingSpinner();
                     }
                 }
             });
@@ -133,17 +131,17 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     private Emitter.Listener onConnectError = new Emitter.Listener() {
         @Override
         public void call(Object... args) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if(isConnected){
-                        isConnected = false;
-                        Log.e("SOCKET", "Error connecting to socket");
-                        makeToast("Error connecting to Socket!", Toast.LENGTH_SHORT);
-                        showLoadingSpinner();
-                    }
+                    isConnected = false;
+                    Log.e("SOCKET", "Error connecting to socket");
+                    makeToast("Error connecting to Socket!", Toast.LENGTH_SHORT);
+                    mTextView.setText("Kan het Filiikot niet bereiken!\nControleer de internetverbinding.");
+                    mImageView.setImageResource(R.drawable.ic_404_cat);
+                    hideLoadingSpinner();
 
                 }
             });
@@ -154,7 +152,7 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     private Emitter.Listener onUpdate = new Emitter.Listener() {
         @Override
         public void call(final Object... args) {
-            if(getActivity() == null)
+            if (getActivity() == null)
                 return;
             getActivity().runOnUiThread(new Runnable() {
                 @Override
@@ -184,15 +182,15 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
                     sb.append(temperature);
                     sb.append(" °C");
                     sb.append("\n");
-                    sb.append(openClosed);
+                    sb.append(openClosed.substring(0, 1).toUpperCase() + openClosed.substring(1).toLowerCase());
                     sb.append(" sinds: ");
                     sb.append("\n");
                     sb.append(openSince);
                     sb.append("\n");
                     mTextView.setText(sb.toString());
-                    if(openClosed.equals("open")){
+                    if (openClosed.equals("open")) {
                         mImageView.setImageResource(R.drawable.ic_open);
-                    }else{
+                    } else {
                         mImageView.setImageResource(R.drawable.ic_closed);
                     }
                 }
@@ -201,8 +199,7 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     };
 
 
-
-    private void makeToast(String message, int toastLenght){
+    private void makeToast(String message, int toastLenght) {
         if (toast != null)
             toast.cancel();
         toast = Toast.makeText(getActivity().getApplicationContext(), message, toastLenght);
@@ -210,14 +207,13 @@ public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup c
     }
 
 
-
-    private void showLoadingSpinner(){
+    private void showLoadingSpinner() {
         mTextView.setVisibility(View.INVISIBLE);
         mImageView.setVisibility(View.INVISIBLE);
         mLoadingSpinner.setVisibility(View.VISIBLE);
     }
 
-    private void hideLoadingSpinner(){
+    private void hideLoadingSpinner() {
         mLoadingSpinner.setVisibility(View.INVISIBLE);
         mTextView.setVisibility(View.VISIBLE);
         mImageView.setVisibility(View.VISIBLE);
