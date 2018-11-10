@@ -11,8 +11,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp">
+        android:layout_height="match_parent">
 
 
         <LinearLayout
@@ -21,23 +20,19 @@
             android:layout_height="match_parent"
             >
 
-            <!-- TODO 2A. ADD FRAGMENT TO TO LAYOUT FILE -->
             <fragment
                 android:id="@+id/list"
                 android:name="be.filii.filiihub.EventsListFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3" />
-            <!-- END -->
 
-            <!-- TODO 2B. ADD FRAGMENT TO TO LAYOUT FILE -->
             <fragment
                 android:id="@+id/detail"
                 android:name="be.filii.filiihub.EventsDetailFragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="5" />
-            <!-- END -->
 
         </LinearLayout>
 
