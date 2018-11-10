@@ -30,8 +30,6 @@ public class FiliihubFragment extends Fragment {
     private ImageView mImageView;
 
     private Socket mSocket;
-    private Boolean isConnected = true;
-    Toast toast = null;
 
     @Nullable
     @Override
@@ -100,10 +98,6 @@ public class FiliihubFragment extends Fragment {
                 @Override
                 public void run() {
                     Log.i("SOCKET", "Socket connected");
-                    if (!isConnected) {
-                        makeToast("Socket Connected!", Toast.LENGTH_SHORT);
-                        isConnected = true;
-                    }
                 }
             });
         }
@@ -119,10 +113,6 @@ public class FiliihubFragment extends Fragment {
                 public void run() {
                     Log.i("SOCKET", "Socket disconnected!");
                     showLoadingSpinner();
-                    if (isConnected) {
-                        isConnected = false;
-                        makeToast("Socket Disconnected!", Toast.LENGTH_SHORT);
-                    }
                 }
             });
         }
@@ -136,13 +126,10 @@ public class FiliihubFragment extends Fragment {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    isConnected = false;
                     Log.e("SOCKET", "Error connecting to socket");
-                    makeToast("Error connecting to Socket!", Toast.LENGTH_SHORT);
                     mTextView.setText("Kan het Filiikot niet bereiken!\nControleer de internetverbinding.");
                     mImageView.setImageResource(R.drawable.ic_404_cat);
                     hideLoadingSpinner();
-
                 }
             });
         }
@@ -197,14 +184,6 @@ public class FiliihubFragment extends Fragment {
             });
         }
     };
-
-
-    private void makeToast(String message, int toastLenght) {
-        if (toast != null)
-            toast.cancel();
-        toast = Toast.makeText(getActivity().getApplicationContext(), message, toastLenght);
-        toast.show();
-    }
 
 
     private void showLoadingSpinner() {

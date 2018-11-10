@@ -29,8 +29,6 @@ public class FiliikotService extends Service {
 
 
     private Socket mSocket;
-    private Boolean isConnected = true;
-    Handler handler;
     PendingIntent pendingIntent;
     Context context;
     String lastFiliikotState = null;
@@ -95,7 +93,6 @@ public class FiliikotService extends Service {
         public void call(final Object... args) {
 
             Log.i("SOCKET Service", "Socket connected");
-            isConnected = true;
 
             setServiceNotification("Verbonden met het Filiikot!", "Websocket aangemaakt.");
 
@@ -107,7 +104,6 @@ public class FiliikotService extends Service {
         public void call(final Object... args) {
 
             Log.e("SOCKET Service", "Socket disconnected");
-            isConnected = false;
 
             setServiceNotification("Verbinding verbroken met het Filiikot!", "De websocket heeft geen verbinding meer.");
 
@@ -119,7 +115,6 @@ public class FiliikotService extends Service {
         public void call(final Object... args) {
 
             Log.i("SOCKET Service", "Error connecting to socket");
-            isConnected = true;
 
             setServiceNotification("Kan niet verbinden met het Filiikot!", "Controleer de internetverbinding.");
 
@@ -131,7 +126,6 @@ public class FiliikotService extends Service {
         public void call(final Object... args) {
 
             Log.i("SOCKET Service", "Socket Status Updated");
-            isConnected = true;
 
 
             JSONObject data = (JSONObject) args[0];
